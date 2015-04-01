@@ -1,13 +1,13 @@
-package TestProject;
+package testRSA;
 
 import java.io.File;
 
-import project.ByteConverter;
-import project.RSACipher;
-import project.RSAKeyPair;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import RSA.ByteConverter;
+import RSA.RSACipher;
+import RSA.RSAKeyPair;
 
 public class TestRSACipher{
 
