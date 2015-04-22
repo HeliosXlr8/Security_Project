@@ -4,20 +4,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
+import cipher.HashGenerator;
 import main.ResLoader;
 import net.miginfocom.swing.MigLayout;
 
@@ -51,6 +57,11 @@ public class EncryptPnl extends JPanel
 	private JTextArea messageArea;
 	private JScrollPane messageAreaPane;
 	
+	private JFileChooser openFile;
+	private JFileChooser saveFile;
+	
+	private FileNameExtensionFilter textFilter;
+	
 	private JFrame parent;
 	
 	public EncryptPnl(JFrame parent)
@@ -65,6 +76,12 @@ public class EncryptPnl extends JPanel
 	
 	private void initFunctionality()
 	{
+		openFile = new JFileChooser();
+		saveFile = new JFileChooser();
+		
+		textFilter = new FileNameExtensionFilter("Text files (*.txt)", "txt");
+		saveFile.addChoosableFileFilter(textFilter);
+		
 		getFromKeypairBtn.addActionListener(new ActionListener()
 		{
 			@Override
@@ -97,6 +114,46 @@ public class EncryptPnl extends JPanel
 					removeMessageAreaPane();
 					addMessagePathChooserPnl();
 				}
+			}
+		});
+		
+		exportBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// encrypten
+				// [is nog niet af]
+				
+				// hashen
+				String resultaatUitEncryptie = "test";
+				HashGenerator hashGen = new HashGenerator();
+				
+				String hash = hashGen.stringHash(resultaatUitEncryptie);
+				if (saveFile.showSaveDialog(parent) == 0)
+				{		
+					String usedFilter = saveFile.getFileFilter().toString();
+					//String usedExtension = usedFilter.substring(usedFilter.length(), usedFilter.length()-4);
+					
+					try(FileWriter fw = new FileWriter(saveFile.getSelectedFile()))
+					{
+						fw.write(hash);
+					}
+					catch (IOException ex)
+					{
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(parent, ex, "An error occurred", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		
+		sendBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// heeft geen zin als het netwerkgedeelte er nog niet is (sockets etc...)
 			}
 		});
 	}
