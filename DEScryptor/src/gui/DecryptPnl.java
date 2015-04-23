@@ -108,7 +108,11 @@ public class DecryptPnl extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				myPrivateKeyField.setText(((MainWindow) parent).getMyPrivateKey());
+				String key = ((MainWindow) parent).getMyPrivateKey();
+				if (!key.isEmpty())
+				{
+					myPrivateKeyField.setText(((MainWindow) parent).getMyPrivateKey());
+				}
 			}
 		});
 		
