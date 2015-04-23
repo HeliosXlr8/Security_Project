@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -132,11 +133,20 @@ public class EncryptPnl extends JPanel
 				String hash = hashGen.stringHash(resultaatUitEncryptie);
 				if (saveFile.showSaveDialog(parent) == 0)
 				{		
-					String usedFilter = saveFile.getFileFilter().toString();
-					//String usedExtension = usedFilter.substring(usedFilter.length(), usedFilter.length()-4);
-					
-					try(FileWriter fw = new FileWriter(saveFile.getSelectedFile()))
+					File fileToSaveTo = saveFile.getSelectedFile();
+					String filename = fileToSaveTo.toString();
+					if (saveFile.getFileFilter().toString().contains("*.txt"))
 					{
+						// selected extension: text file
+						if (!filename.endsWith(".txt"))
+						{
+							fileToSaveTo = new File(filename+".txt");
+						}
+					}
+					
+					try(FileWriter fw = new FileWriter(fileToSaveTo))
+					{
+						//...
 						fw.write(hash);
 					}
 					catch (IOException ex)
