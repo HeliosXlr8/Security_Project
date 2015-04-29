@@ -13,39 +13,30 @@ import javax.crypto.CipherOutputStream;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
-import javax.swing.JLabel;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
-public class temp {
-
-	private JLabel lblInfo = new JLabel();
-	private JTextArea txtName = new JTextArea(1,30);
+public class DES extends JFrame{
 	
-	public static void main(String[] args) {
-		
-	}
-	
-	public void CipherFile(String key, int mode){
+	public DES(SecretKey key, int mode){
 
 		System.out.println("Entering EncFile()");
-		lblInfo.setText("Select file for encryption.");
 		
 		ShowFileDialog fc = new ShowFileDialog();
 		String file = fc.getFile();
-		String strOutputName=null;
+		String strOutputName;
 		
 		if(file != null){
-			//check for filename
-			if (txtName.getText() != null){
-				strOutputName = txtName.getText();
+			if(mode == Cipher.ENCRYPT_MODE){
+				strOutputName = file + "enc";
 			}else{
-				strOutputName = file.substring(0, file.length()-5) + "-d";
+				strOutputName = file.substring(0,file.length()-3);
 			}
-
-			lblInfo.setText("File selected. Encrypting...");
 			
 			FileInputStream fis;
 			FileOutputStream fos;
+			
+			System.out.println(file);
+			System.out.println(strOutputName);
 			
 			try {
 				fis = new FileInputStream(file);
@@ -54,27 +45,28 @@ public class temp {
 				fos.close();
 				fis.close();
 				
-				System.out.println(file + " encrypted and saved to " + strOutputName + "-encr");
-				lblInfo.setText(file + " encrypted and saved to " + strOutputName + "-encr");
+				if(mode == Cipher.ENCRYPT_MODE){
+					System.out.println(file + " encrypted and saved to " + strOutputName);
+				}else{
+					System.out.println(file + " decrypted and saved to " + strOutputName);
+				}
 			
 			} catch (FileNotFoundException e) {
 				System.out.println("File not found.");
-				lblInfo.setText("File not found");
 			} catch (Throwable e){
 				System.out.println("Error");
-				lblInfo.setText("An unanticipated error has occurred");
 			}
 		}else{
-			lblInfo.setText("");
+			
 		}
 	}
 	
 	
-	public static void encryptOrDecrypt(String key, int mode, InputStream is, OutputStream os) throws Throwable {
+	public static void encryptOrDecrypt(SecretKey key, int mode, InputStream is, OutputStream os) throws Throwable {
 		
 		System.out.println("Starting encryption/decryption");
 		
-		DESKeySpec dks = new DESKeySpec(key.getBytes());
+		DESKeySpec dks = new DESKeySpec(key.toString().getBytes("UTF-8"));
 		SecretKeyFactory skf = SecretKeyFactory.getInstance("DES");
 		SecretKey desKey = skf.generateSecret(dks);
 		Cipher cipher = Cipher.getInstance("DES"); // DES/ECB/PKCS5Padding for SunJCE
