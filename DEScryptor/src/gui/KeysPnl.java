@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,13 +21,16 @@ public class KeysPnl extends JPanel
 	 */
 	private static final long serialVersionUID = 1424556237875499064L;
 	
+	private JPanel symKeyPnl;
 	private JPanel keypairPnl;
 	private JPanel frameBtnPnl;
 	
+	public JTextField symmetricKeyField;
 	public JTextField myPrivateKeyField;
 	public JTextField myPublicKeyField;
 	
-	private JButton generateNowBtn;
+	private JButton generateSymKeyBtn;
+	private JButton generateKeypairBtn;
 	private JButton openKeypairBtn;
 	private JButton saveKeypairBtn;
 	
@@ -41,7 +45,7 @@ public class KeysPnl extends JPanel
 	
 	private void initFunctionality()
 	{
-		generateNowBtn.addActionListener(new ActionListener()
+		generateKeypairBtn.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -57,6 +61,10 @@ public class KeysPnl extends JPanel
 		myPrivateKeyLbl.setFont(ResLoader.getDefaultFont());
 		keypairPnl.add(myPrivateKeyLbl);
 		
+		symmetricKeyField = new JTextField();
+		symmetricKeyField.setFont(ResLoader.getDefaultFont());
+		symKeyPnl.add(symmetricKeyField, "wrap, width 100:500");
+		
 		myPrivateKeyField = new JTextField();
 		myPrivateKeyField.setFont(ResLoader.getDefaultFont());
 		keypairPnl.add(myPrivateKeyField, "wrap, width 100:500");
@@ -69,9 +77,13 @@ public class KeysPnl extends JPanel
 		myPublicKeyField.setFont(ResLoader.getDefaultFont());
 		keypairPnl.add(myPublicKeyField, "wrap, width 100:500");
 		
-		generateNowBtn = new JButton("generate now");
-		generateNowBtn.setFont(ResLoader.getDefaultFont());
-		keypairPnl.add(generateNowBtn, "gaptop 14");
+		generateSymKeyBtn = new JButton("generate now");
+		generateSymKeyBtn.setFont(ResLoader.getDefaultFont());
+		symKeyPnl.add(generateSymKeyBtn, "gaptop 14");
+		
+		generateKeypairBtn = new JButton("generate now");
+		generateKeypairBtn.setFont(ResLoader.getDefaultFont());
+		keypairPnl.add(generateKeypairBtn, "gaptop 14");
 		
 		openKeypairBtn = new JButton("open keypair...");
 		openKeypairBtn.setFont(ResLoader.getDefaultFont());
@@ -84,8 +96,13 @@ public class KeysPnl extends JPanel
 	
 	private void initPanels()
 	{
+		symKeyPnl = new JPanel(new MigLayout());
+		symKeyPnl.setBorder(BorderFactory.createTitledBorder("symmetric key (DES)"));
+		((TitledBorder) symKeyPnl.getBorder()).setTitleFont(ResLoader.getBoldFont());
+		add(symKeyPnl, "wrap, width 450:5000");
+		
 		keypairPnl = new JPanel(new MigLayout());
-		keypairPnl.setBorder(BorderFactory.createTitledBorder("keypair"));
+		keypairPnl.setBorder(BorderFactory.createTitledBorder("keypair (RSA)"));
 		((TitledBorder) keypairPnl.getBorder()).setTitleFont(ResLoader.getBoldFont());
 		add(keypairPnl, "wrap, width 450:5000");
 		
