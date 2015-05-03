@@ -52,9 +52,11 @@ public class SteganographyPnl extends JPanel
 	private JScrollPane messageAreaPane;
 	
 	private JButton encodeBtn;
-	private JButton decodeBtn;
+	private JButton decodeBtn1;
+	private JButton decodeBtn2;
 	
 	private JFileChooser openFile;
+	private JFileChooser saveFile;
 	private FileNameExtensionFilter pngFilter;
 	
 	public SteganographyPnl(JFrame parent)
@@ -70,6 +72,7 @@ public class SteganographyPnl extends JPanel
 	private void initFunctionality()
 	{
 		openFile = new JFileChooser();
+		saveFile = new JFileChooser();
 		pngFilter = new FileNameExtensionFilter("PNG files (*.png)", "png");
 		openFile.addChoosableFileFilter(pngFilter);
 		openFile.setAcceptAllFileFilterUsed(false);
@@ -107,12 +110,28 @@ public class SteganographyPnl extends JPanel
 			}
 		});
 		
-		decodeBtn.addActionListener(new ActionListener()
+		decodeBtn1.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				//[start decoding]
+				//[open message as text]
+			}
+		});
+		
+		decodeBtn2.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				//[start decoding]
+				
+				//[save message to provided path]
+				if (saveFile.showSaveDialog(parent) == 0)
+				{
+					// write decoded message to path
+				}
 			}
 		});
 		
@@ -208,9 +227,13 @@ public class SteganographyPnl extends JPanel
 		encodeBtn.setFont(ResLoader.getDefaultFont());
 		frameBtnPnl.add(encodeBtn);
 		
-		decodeBtn = new JButton("decode");
-		decodeBtn.setFont(ResLoader.getDefaultFont());
-		frameBtnPnl.add(decodeBtn);
+		decodeBtn1 = new JButton("decode and open as text");
+		decodeBtn1.setFont(ResLoader.getDefaultFont());
+		frameBtnPnl.add(decodeBtn1);
+		
+		decodeBtn2 = new JButton("decode and save as...");
+		decodeBtn2.setFont(ResLoader.getDefaultFont());
+		frameBtnPnl.add(decodeBtn2);
 	}
 	
 	private void initPanels()
