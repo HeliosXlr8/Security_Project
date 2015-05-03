@@ -14,7 +14,6 @@ package cipher;
  */
 import java.io.File;
 
-import java.awt.Point;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;

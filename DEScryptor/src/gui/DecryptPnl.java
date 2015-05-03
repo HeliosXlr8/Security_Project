@@ -21,7 +21,9 @@ public class DecryptPnl extends JPanel
 	 * JPanel that contains the elements for the decrypting tab
 	 */
 	private static final long serialVersionUID = -1665345338497275072L;
-
+	
+	private JFrame parent;
+	
 	private JPanel infoPnl;
 	private JPanel messagePnl;
 	private JPanel verificationPnl;
@@ -44,8 +46,6 @@ public class DecryptPnl extends JPanel
 	
 	private JLabel hashChkResultLbl;
 	private String[] hashChkResults;
-	
-	private JFrame parent;
 	
 	public DecryptPnl(JFrame parent)
 	{

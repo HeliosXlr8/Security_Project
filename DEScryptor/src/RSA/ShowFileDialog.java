@@ -1,10 +1,7 @@
 package RSA;
 
-import java.awt.Button;
 import java.awt.FileDialog;
 import java.awt.Frame;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 

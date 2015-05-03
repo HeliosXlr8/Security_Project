@@ -1,12 +1,12 @@
 package gui;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.border.TitledBorder;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -21,6 +21,8 @@ public class KeysPnl extends JPanel
 	 */
 	private static final long serialVersionUID = 1424556237875499064L;
 	
+	private JFrame parent;
+	
 	private JPanel symKeyPnl;
 	private JPanel keypairPnl;
 	private JPanel frameBtnPnl;
@@ -34,8 +36,9 @@ public class KeysPnl extends JPanel
 	private JButton openKeypairBtn;
 	private JButton saveKeypairBtn;
 	
-	public KeysPnl()
+	public KeysPnl(JFrame parent)
 	{
+		this.parent = parent;
 		setLayout(new MigLayout());
 		
 		initPanels();

@@ -35,6 +35,8 @@ public class EncryptPnl extends JPanel
 	 */
 	private static final long serialVersionUID = 2474921857423394588L;
 	
+	private JFrame parent;
+	
 	private JPanel infoPnl;
 	private JPanel messagePnl;
 	private JPanel optionsPnl;
@@ -62,8 +64,6 @@ public class EncryptPnl extends JPanel
 	private JFileChooser saveFile;
 	
 	private FileNameExtensionFilter textFilter;
-	
-	private JFrame parent;
 	
 	public EncryptPnl(JFrame parent)
 	{
@@ -258,28 +258,28 @@ public class EncryptPnl extends JPanel
 	{
 		messagePnl.remove(messagePathChooserPnl);
 		messagePnl.revalidate();
-		parent.repaint();
+		repaint();
 	}
 	
 	private void addMessagePathChooserPnl()
 	{
 		messagePnl.add(messagePathChooserPnl, "grow, gapleft 32");
 		messagePnl.revalidate();
-		parent.repaint();
+		repaint();
 	}
 	
 	private void removeMessageAreaPane()
 	{
 		messagePnl.remove(messageAreaPane);
 		messagePnl.revalidate();
-		parent.repaint();
+		repaint();
 	}
 	
 	private void addMessageAreaPane()
 	{
 		messagePnl.add(messageAreaPane, "width 150:5000, height 150:5000");
 		messagePnl.revalidate();
-		parent.repaint();
+		repaint();
 	}
 	
 	private void initPanels()

@@ -26,6 +26,7 @@ public class MainWindow extends JFrame
 	private KeysPnl keysPnl;
 	private EncryptPnl encryptPnl;
 	private DecryptPnl decryptPnl;
+	private SteganographyPnl steganographyPnl;
 	
 	private JPanel mainPnl;
 	private JTabbedPane tPane;
@@ -68,7 +69,8 @@ public class MainWindow extends JFrame
 	
 	private void initTabs()
 	{
-		tLabels = new JLabel[]{new JLabel("keys"), new JLabel("encrypt"), new JLabel("decrypt")};
+		tLabels = new JLabel[]{new JLabel("keys"),   new JLabel("encrypt"), 
+							   new JLabel("decrypt"), new JLabel("steganography")};
 		for (JLabel lbl : tLabels)
 		{
 			lbl.setPreferredSize(new Dimension(200, tHeight));
@@ -81,9 +83,11 @@ public class MainWindow extends JFrame
 		tPane.add(keysPnl);
 		tPane.add(encryptPnl);
 		tPane.add(decryptPnl);
+		tPane.add(steganographyPnl);
 		tPane.setTabComponentAt(0, tLabels[0]);
 		tPane.setTabComponentAt(1, tLabels[1]);
 		tPane.setTabComponentAt(2, tLabels[2]);
+		tPane.setTabComponentAt(3, tLabels[3]);
 		
 		mainPnl.add(tPane);
 		add(mainPnl);
@@ -99,7 +103,7 @@ public class MainWindow extends JFrame
 			{
 				Component c = (Component) evt.getSource();
 				int width = c.getSize().width;
-				width = width / 3;
+				width = width / tPane.getTabCount();
 				for (JLabel lbl : tLabels)
 				{
 					lbl.setPreferredSize(new Dimension(width-12, tHeight));
@@ -107,9 +111,10 @@ public class MainWindow extends JFrame
 			}
 		});
 		
-		keysPnl = new KeysPnl();
+		keysPnl = new KeysPnl(this);
 		encryptPnl = new EncryptPnl(this);
 		decryptPnl = new DecryptPnl(this);
+		steganographyPnl = new SteganographyPnl(this);
 	}
 	
 	public static String getVersion()
