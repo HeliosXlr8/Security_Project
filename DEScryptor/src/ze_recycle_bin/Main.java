@@ -1,4 +1,4 @@
-package DES;
+package ze_recycle_bin;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;

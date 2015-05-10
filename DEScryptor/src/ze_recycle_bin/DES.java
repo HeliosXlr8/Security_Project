@@ -1,4 +1,4 @@
-package DES;
+package ze_recycle_bin;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,9 +13,8 @@ import javax.crypto.CipherOutputStream;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
-import javax.swing.*;
 
-public class DES extends JFrame{
+public class DES{
 	
 	public DES(SecretKey key, int mode){
 
@@ -59,6 +58,21 @@ public class DES extends JFrame{
 		}else{
 			
 		}
+	}
+	
+	public static SecretKey getSecretKey(String secretPassword) {
+		  
+		SecretKey key = null;
+		try {
+			  DESKeySpec keySpec = new DESKeySpec(secretPassword.getBytes("UTF8"));
+			  SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+			  key = keyFactory.generateSecret(keySpec);
+			  System.out.println();
+		} catch (Exception e) {
+			  e.printStackTrace();
+			  System.out.println("Error in generating the secret Key");
+		}
+		return key;
 	}
 	
 	

@@ -9,6 +9,8 @@ import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
+import sun.misc.BASE64Encoder;
+
 public final class RSAKeyPair {
     
     private int keyLength;
@@ -17,21 +19,38 @@ public final class RSAKeyPair {
     private String publicKeyName = "//public.key";
     private String privateKeyName = "//private.key";
     
-    public RSAKeyPair(int keyLength) throws GeneralSecurityException {
-        this.keyLength = keyLength;
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        keyPairGenerator.initialize(this.keyLength);
-        KeyPair keyPair = keyPairGenerator.generateKeyPair();
-        privateKey = keyPair.getPrivate();
-        publicKey = keyPair.getPublic();
+    public RSAKeyPair(int keyLength) {
+        try
+        {
+        	this.keyLength = keyLength;
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(this.keyLength);
+            KeyPair keyPair = keyPairGenerator.generateKeyPair();
+            privateKey = keyPair.getPrivate();
+            publicKey = keyPair.getPublic();
+        }
+    	catch (GeneralSecurityException gsEx)
+        {
+    		gsEx.printStackTrace();
+        }
     }
     
     public final PrivateKey getPrivateKey() {
     		return privateKey;
     }
     
+    public String getPrivateKeyStr()
+    {
+    	return new BASE64Encoder().encode(privateKey.getEncoded());
+    }
+    
     public final PublicKey getPublicKey() {
         return publicKey;
+    }
+    
+    public String getPublicKeyStr()
+    {
+    	return new BASE64Encoder().encode(publicKey.getEncoded());
     }
     
     public final void toFileSystem(String privateKeyPathName, String publicKeyPathName)

@@ -1,4 +1,4 @@
-package DES;
+package ze_recycle_bin;
 
 import java.awt.FileDialog;
 

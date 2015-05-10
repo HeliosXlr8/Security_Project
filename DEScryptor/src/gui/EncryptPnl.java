@@ -13,7 +13,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -35,7 +34,7 @@ public class EncryptPnl extends JPanel
 	 */
 	private static final long serialVersionUID = 2474921857423394588L;
 	
-	private JFrame parent;
+	private MainWindow parent;
 	
 	private JPanel infoPnl;
 	private JPanel messagePnl;
@@ -65,7 +64,7 @@ public class EncryptPnl extends JPanel
 	
 	private FileNameExtensionFilter textFilter;
 	
-	public EncryptPnl(JFrame parent)
+	public EncryptPnl(MainWindow parent)
 	{
 		this.parent = parent;
 		setLayout(new MigLayout());
@@ -88,10 +87,10 @@ public class EncryptPnl extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				String key = ((MainWindow) parent).getMyPrivateKey();
+				String key = parent.getMyPrivateKey();
 				if (!key.isEmpty())
 				{
-					myPrivateKeyField.setText(((MainWindow) parent).getMyPrivateKey());
+					myPrivateKeyField.setText(parent.getMyPrivateKey());
 				}
 			}
 		});

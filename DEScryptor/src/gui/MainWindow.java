@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
+import DES.DESencrypter;
+import RSA.RSAKeyPair;
 import main.ResLoader;
 
 public class MainWindow extends JFrame
@@ -32,6 +34,9 @@ public class MainWindow extends JFrame
 	private JTabbedPane tPane;
 	private JLabel[] tLabels;
 	private int tHeight = 30;
+	
+	public DESencrypter des;
+	public RSAKeyPair rsaKp;
 	
 	public MainWindow()
 	{

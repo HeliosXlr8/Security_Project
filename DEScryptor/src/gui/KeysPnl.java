@@ -2,15 +2,21 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.border.TitledBorder;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import DES.DESencrypter;
+import RSA.RSAKeyPair;
 import main.ResLoader;
 import net.miginfocom.swing.MigLayout;
 
@@ -21,7 +27,7 @@ public class KeysPnl extends JPanel
 	 */
 	private static final long serialVersionUID = 1424556237875499064L;
 	
-	private JFrame parent;
+	private MainWindow parent;
 	
 	private JPanel symKeyPnl;
 	private JPanel keypairPnl;
@@ -36,7 +42,10 @@ public class KeysPnl extends JPanel
 	private JButton openKeypairBtn;
 	private JButton saveKeypairBtn;
 	
-	public KeysPnl(JFrame parent)
+	private JFileChooser openFile;
+	private JFileChooser saveFile;
+	
+	public KeysPnl(MainWindow parent)
 	{
 		this.parent = parent;
 		setLayout(new MigLayout());
@@ -48,12 +57,64 @@ public class KeysPnl extends JPanel
 	
 	private void initFunctionality()
 	{
+		openFile = new JFileChooser();
+		saveFile = new JFileChooser();
+		
+		generateSymKeyBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				parent.des = new DESencrypter();
+				symmetricKeyField.setText(parent.des.getKeyStr());
+			}
+		});
+		
 		generateKeypairBtn.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				//[start keypair generation]
+				parent.rsaKp = new RSAKeyPair(512);
+				myPrivateKeyField.setText(parent.rsaKp.getPrivateKeyStr());
+				myPublicKeyField.setText(parent.rsaKp.getPublicKeyStr());
+			}
+		});
+		
+		openKeypairBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if (saveFile.showOpenDialog(parent) == 0)
+				{
+					
+				}
+			}
+		});
+		
+		saveKeypairBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if (saveFile.showSaveDialog(parent) == 0)
+				{
+					File fileToSaveTo = saveFile.getSelectedFile();
+					
+					try(FileWriter fw = new FileWriter(fileToSaveTo))
+					{
+						// TODO: opsplitsing tss private en public key, beide moeten in aparte files
+						fw.write(parent.getMyPrivateKey());
+						//fw.write(System.lineSeparator());
+						//fw.write(parent.getMyPublicKey());
+					}
+					catch (IOException ex)
+					{
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(parent, ex, "An error occurred", JOptionPane.ERROR_MESSAGE);
+					}
+				}
 			}
 		});
 	}
