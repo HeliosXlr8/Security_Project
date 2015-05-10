@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 
 import javax.swing.border.TitledBorder;
 import javax.swing.BorderFactory;
@@ -39,8 +41,10 @@ public class KeysPnl extends JPanel
 	
 	private JButton generateSymKeyBtn;
 	private JButton generateKeypairBtn;
-	private JButton openKeypairBtn;
-	private JButton saveKeypairBtn;
+	private JButton openPrKbtn;
+	private JButton savePrKbtn;
+	private JButton openPuKbtn;
+	private JButton savePuKbtn;
 	
 	private JFileChooser openFile;
 	private JFileChooser saveFile;
@@ -81,19 +85,30 @@ public class KeysPnl extends JPanel
 			}
 		});
 		
-		openKeypairBtn.addActionListener(new ActionListener()
+		openPrKbtn.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				if (saveFile.showOpenDialog(parent) == 0)
+				if (openFile.showOpenDialog(parent) == 0)
 				{
+					File fileToReadFrom = openFile.getSelectedFile();
 					
+					try
+					{
+						byte[] content = Files.readAllBytes(fileToReadFrom.toPath());
+						parent.setMyPrivateKey(new String(content, Charset.forName("UTF-8")));
+					}
+					catch (IOException ex)
+					{
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(parent, ex, "An error occurred", JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			}
 		});
 		
-		saveKeypairBtn.addActionListener(new ActionListener()
+		savePrKbtn.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -104,10 +119,52 @@ public class KeysPnl extends JPanel
 					
 					try(FileWriter fw = new FileWriter(fileToSaveTo))
 					{
-						// TODO: opsplitsing tss private en public key, beide moeten in aparte files
 						fw.write(parent.getMyPrivateKey());
-						//fw.write(System.lineSeparator());
-						//fw.write(parent.getMyPublicKey());
+					}
+					catch (IOException ex)
+					{
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(parent, ex, "An error occurred", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		
+		openPuKbtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if (openFile.showOpenDialog(parent) == 0)
+				{
+					File fileToReadFrom = openFile.getSelectedFile();
+					
+					try
+					{
+						byte[] content = Files.readAllBytes(fileToReadFrom.toPath());
+						parent.setMyPublicKey(new String(content, Charset.forName("UTF-8")));
+					}
+					catch (IOException ex)
+					{
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(parent, ex, "An error occurred", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		
+		savePuKbtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if (saveFile.showSaveDialog(parent) == 0)
+				{
+					File fileToSaveTo = saveFile.getSelectedFile();
+					
+					try(FileWriter fw = new FileWriter(fileToSaveTo))
+					{
+						fw.write(parent.getMyPublicKey());
 					}
 					catch (IOException ex)
 					{
@@ -131,7 +188,15 @@ public class KeysPnl extends JPanel
 		
 		myPrivateKeyField = new JTextField();
 		myPrivateKeyField.setFont(ResLoader.getDefaultFont());
-		keypairPnl.add(myPrivateKeyField, "wrap, width 100:500");
+		keypairPnl.add(myPrivateKeyField, "width 100:500");
+		
+		openPrKbtn = new JButton("open...");
+		openPrKbtn.setFont(ResLoader.getDefaultFont());
+		keypairPnl.add(openPrKbtn);
+		
+		savePrKbtn = new JButton("save...");
+		savePrKbtn.setFont(ResLoader.getDefaultFont());
+		keypairPnl.add(savePrKbtn, "wrap");
 		
 		JLabel myPublicKeyLbl = new JLabel("my public key: ");
 		myPublicKeyLbl.setFont(ResLoader.getDefaultFont());
@@ -139,7 +204,15 @@ public class KeysPnl extends JPanel
 		
 		myPublicKeyField = new JTextField();
 		myPublicKeyField.setFont(ResLoader.getDefaultFont());
-		keypairPnl.add(myPublicKeyField, "wrap, width 100:500");
+		keypairPnl.add(myPublicKeyField, "width 100:500");
+		
+		openPuKbtn = new JButton("open...");
+		openPuKbtn.setFont(ResLoader.getDefaultFont());
+		keypairPnl.add(openPuKbtn);
+		
+		savePuKbtn = new JButton("save...");
+		savePuKbtn.setFont(ResLoader.getDefaultFont());
+		keypairPnl.add(savePuKbtn, "wrap");
 		
 		generateSymKeyBtn = new JButton("generate now");
 		generateSymKeyBtn.setFont(ResLoader.getDefaultFont());
@@ -148,14 +221,6 @@ public class KeysPnl extends JPanel
 		generateKeypairBtn = new JButton("generate now");
 		generateKeypairBtn.setFont(ResLoader.getDefaultFont());
 		keypairPnl.add(generateKeypairBtn, "gaptop 14");
-		
-		openKeypairBtn = new JButton("open keypair...");
-		openKeypairBtn.setFont(ResLoader.getDefaultFont());
-		frameBtnPnl.add(openKeypairBtn);
-		
-		saveKeypairBtn = new JButton("save keypair...");
-		saveKeypairBtn.setFont(ResLoader.getDefaultFont());
-		frameBtnPnl.add(saveKeypairBtn);
 	}
 	
 	private void initPanels()
