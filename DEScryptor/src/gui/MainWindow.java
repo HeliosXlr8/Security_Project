@@ -74,7 +74,7 @@ public class MainWindow extends JFrame
 	
 	private void initTabs()
 	{
-		tLabels = new JLabel[]{new JLabel("keys"),   new JLabel("encrypt"), 
+		tLabels = new JLabel[]{new JLabel("my keys"),   new JLabel("encrypt"), 
 							   new JLabel("decrypt"), new JLabel("steganography")};
 		for (JLabel lbl : tLabels)
 		{
