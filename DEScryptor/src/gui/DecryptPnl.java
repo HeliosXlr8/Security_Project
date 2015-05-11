@@ -33,10 +33,10 @@ public class DecryptPnl extends JPanel
 	private JTextField senderPublicKeyField;
 	private JTextField messagePathField;
 	
-	private JButton choosePtKBtn;	// "choose my private key" button
-	private JButton choosePcKBtn;	// "choose sender's public key" button
+	private JButton openPtKBtn;	// "open my private key" button
+	private JButton openPcKBtn;	// "open sender's public key" button
 	private JButton getFromKeypairBtn;
-	private JButton chooseHashFileBtn;
+	private JButton openHashFileBtn;
 	private JButton chooseMessagePathBtn;
 	private JButton openAsTextBtn;
 	private JButton saveAsBtn;
@@ -140,9 +140,9 @@ public class DecryptPnl extends JPanel
 		myPrivateKeyField.setFont(ResLoader.getDefaultFont());
 		infoPnl.add(myPrivateKeyField, "width 100:500");
 		
-		choosePtKBtn = new JButton("choose...");
-		choosePtKBtn.setFont(ResLoader.getDefaultFont());
-		infoPnl.add(choosePtKBtn);
+		openPtKBtn = new JButton("open...");
+		openPtKBtn.setFont(ResLoader.getDefaultFont());
+		infoPnl.add(openPtKBtn);
 		
 		getFromKeypairBtn = new JButton("get from keypair");
 		getFromKeypairBtn.setFont(ResLoader.getDefaultFont());
@@ -156,9 +156,9 @@ public class DecryptPnl extends JPanel
 		senderPublicKeyField.setFont(ResLoader.getDefaultFont());
 		infoPnl.add(senderPublicKeyField, "width 100:500");
 		
-		choosePcKBtn = new JButton("choose...");
-		choosePcKBtn.setFont(ResLoader.getDefaultFont());
-		infoPnl.add(choosePcKBtn);
+		openPcKBtn = new JButton("open...");
+		openPcKBtn.setFont(ResLoader.getDefaultFont());
+		infoPnl.add(openPcKBtn);
 		
 		// messagePnl components
 		JLabel messagePathLbl = new JLabel("path: ");
@@ -192,9 +192,9 @@ public class DecryptPnl extends JPanel
 		verificationPnl.add(hashChkResultLbl, "wrap");
 		setHashResult(-1);
 		
-		chooseHashFileBtn = new JButton("choose hash file...");
-		chooseHashFileBtn.setFont(ResLoader.getDefaultFont());
-		verificationPnl.add(chooseHashFileBtn, "gaptop 14");
+		openHashFileBtn = new JButton("open hash file...");
+		openHashFileBtn.setFont(ResLoader.getDefaultFont());
+		verificationPnl.add(openHashFileBtn, "gaptop 14");
 		
 		// frame components
 		openAsTextBtn = new JButton("open as text");

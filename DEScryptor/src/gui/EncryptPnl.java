@@ -46,8 +46,8 @@ public class EncryptPnl extends JPanel
 	private JTextField receiverPublicKeyField;
 	private JTextField messagePathField;
 	
-	private JButton choosePtKBtn;	// "choose my private key" button
-	private JButton choosePcKBtn;	// "choose receiver's public key" button
+	private JButton openPtKBtn;	// "open my private key" button
+	private JButton openPcKBtn;	// "open receiver's public key" button
 	private JButton getFromKeypairBtn;
 	private JButton chooseMessagePathBtn;
 	private JButton exportBtn;
@@ -182,9 +182,9 @@ public class EncryptPnl extends JPanel
 		myPrivateKeyField.setFont(ResLoader.getDefaultFont());
 		infoPnl.add(myPrivateKeyField, "width 100:500");
 		
-		choosePtKBtn = new JButton("choose...");
-		choosePtKBtn.setFont(ResLoader.getDefaultFont());
-		infoPnl.add(choosePtKBtn);
+		openPtKBtn = new JButton("open...");
+		openPtKBtn.setFont(ResLoader.getDefaultFont());
+		infoPnl.add(openPtKBtn);
 		
 		getFromKeypairBtn = new JButton("get from keypair");
 		getFromKeypairBtn.setFont(ResLoader.getDefaultFont());
@@ -198,9 +198,9 @@ public class EncryptPnl extends JPanel
 		receiverPublicKeyField.setFont(ResLoader.getDefaultFont());
 		infoPnl.add(receiverPublicKeyField, "width 100:500");
 		
-		choosePcKBtn = new JButton("choose...");
-		choosePcKBtn.setFont(ResLoader.getDefaultFont());
-		infoPnl.add(choosePcKBtn);
+		openPcKBtn = new JButton("open...");
+		openPcKBtn.setFont(ResLoader.getDefaultFont());
+		infoPnl.add(openPcKBtn);
 		
 		// messagePnl components
 		ButtonGroup textOrFileBtnGrp = new ButtonGroup();
