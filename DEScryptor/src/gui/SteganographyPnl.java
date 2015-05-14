@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -11,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -19,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import cipher.SteganographyConverter;
 import main.ResLoader;
 import net.miginfocom.swing.MigLayout;
 
@@ -73,7 +76,7 @@ public class SteganographyPnl extends JPanel
 	{
 		openFile = new JFileChooser();
 		saveFile = new JFileChooser();
-		pngFilter = new FileNameExtensionFilter("PNG files (*.png)", "png");
+		pngFilter = new FileNameExtensionFilter("Images (*.png & *.jpg)", "png", "jpg");
 		openFile.addChoosableFileFilter(pngFilter);
 		openFile.setAcceptAllFileFilterUsed(false);
 		
@@ -106,7 +109,19 @@ public class SteganographyPnl extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				//[start encoding]
+				SteganographyConverter sc = new SteganographyConverter();
+				if (textRadBtn.isSelected()) {					
+					sc.encodeMessage(messageArea.getText(), imgPathFieldOriginal.getText());
+				}
+				else {
+					try {
+						sc.encodeFile(messagePathField.getText(), imgPathFieldOriginal.getText());
+					} catch (IOException e1) {
+						JOptionPane.showMessageDialog(null, 
+								"There is a problem with the path of the file you want to hide!","Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				}
 			}
 		});
 		
@@ -115,8 +130,9 @@ public class SteganographyPnl extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				//[start decoding]
-				//[open message as text]
+				SteganographyConverter sc = new SteganographyConverter();
+				String message = sc.decodeMessage(imgPathFieldNew.getText());
+				messageArea.setText(message);
 			}
 		});
 		

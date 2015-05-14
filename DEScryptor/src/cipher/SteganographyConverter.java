@@ -13,7 +13,10 @@ package cipher;
  *import list
  */
 import java.io.File;
-
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
@@ -36,24 +39,31 @@ public class SteganographyConverter
 	}
 	
 	public boolean encodeMessage(String message, String image) {
-		String[] parts = message.split("/");
+		File file = new File(image);
+		String path, original, ext1;
+		path = file.getParent();
+		original = file.getName().substring(0, file.getName().lastIndexOf('.'));
+		ext1 = file.getName().substring(file.getName().lastIndexOf('.') + 1);
+		return encode(path, original, ext1, original + "Encoded", message);
+	}
+	
+	public boolean encodeFile(String message, String filePath) throws IOException {
+		String[] parts = message.split("\\");
 		String path = "", original, ext1;
 		for (int i = 0; i < parts.length - 1; i++) {
-			path = path + parts[i] + "/";
+			path = path + parts[i] + "\\\\";
 		}
 		original = parts[parts.length - 1];
 		ext1 = original.substring(original.indexOf("."));
 		original = original.substring(0, original.indexOf("."));
-		return encode(path, original, ext1, original + "Encoded", message);
+		return encodeImage(path, original, ext1, original + "Encoded", Paths.get(filePath));
 	}
 	
 	public String decodeMessage (String image) {
-		String[] parts = image.split("/");
-		String path = "", name;
-		for (int i = 0; i < parts.length - 1; i++) {
-			path = path + parts[i] + "/";
-		}
-		name = parts[parts.length - 1];
+		File file = new File(image);
+		String path, name;
+		path = file.getParent();
+		name = file.getName().substring(0, file.getName().lastIndexOf('.'));
 		return decode(path, name);
 	}
 	
@@ -74,6 +84,18 @@ public class SteganographyConverter
 		//user space is not necessary for Encrypting
 		BufferedImage image = user_space(image_orig);
 		image = add_text(image,message);
+		
+		return(setImage(image,new File(image_path(path,stegan,"png")),"png"));
+	}
+	
+	public boolean encodeImage(String path, String original, String ext1, String stegan, Path filePath) throws IOException
+	{
+		String			file_name 	= image_path(path,original,ext1);
+		BufferedImage 	image_orig	= getImage(file_name);
+		
+		//user space is not necessary for Encrypting
+		BufferedImage image = user_space(image_orig);
+		image = add_file(image,filePath);
 		
 		return(setImage(image,new File(image_path(path,stegan,"png")),"png"));
 	}
@@ -172,6 +194,25 @@ public class SteganographyConverter
 		//convert all items to byte arrays: image, message, message length
 		byte img[]  = get_byte_data(image);
 		byte msg[] = text.getBytes();
+		byte len[]   = bit_conversion(msg.length);
+		try
+		{
+			encode_text(img, len,  0); //0 first positiong
+			encode_text(img, msg, 32); //4 bytes of space for length: 4bytes*8bit = 32 bits
+		}
+		catch(Exception e)
+		{
+			JOptionPane.showMessageDialog(null, 
+"Target File cannot hold message!", "Error",JOptionPane.ERROR_MESSAGE);
+		}
+		return image;
+	}
+	
+	private BufferedImage add_file(BufferedImage image, Path path) throws IOException
+	{
+		//convert all items to byte arrays: image, message, message length
+		byte img[]  = get_byte_data(image);
+		byte msg[] = Files.readAllBytes(path);
 		byte len[]   = bit_conversion(msg.length);
 		try
 		{
