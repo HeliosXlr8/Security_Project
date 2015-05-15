@@ -59,6 +59,7 @@ public class SteganographyPnl extends JPanel
 	private JButton decodeBtn2;
 	
 	private JFileChooser openFile;
+	private JFileChooser openRandomFile;
 	private JFileChooser saveFile;
 	private FileNameExtensionFilter pngFilter;
 	
@@ -75,6 +76,7 @@ public class SteganographyPnl extends JPanel
 	private void initFunctionality()
 	{
 		openFile = new JFileChooser();
+		openRandomFile = new JFileChooser();
 		saveFile = new JFileChooser();
 		pngFilter = new FileNameExtensionFilter("Images (*.png & *.jpg)", "png", "jpg");
 		openFile.addChoosableFileFilter(pngFilter);
@@ -100,6 +102,18 @@ public class SteganographyPnl extends JPanel
 				if (openFile.showOpenDialog(parent) == 0)
 				{
 					imgPathFieldNew.setText(openFile.getSelectedFile().getAbsolutePath());
+				}
+			}
+		});
+		
+		chooseMessagePathBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if (openRandomFile.showOpenDialog(parent) == 0)
+				{
+					messagePathField.setText(openRandomFile.getSelectedFile().getAbsolutePath());
 				}
 			}
 		});
@@ -147,6 +161,8 @@ public class SteganographyPnl extends JPanel
 				if (saveFile.showSaveDialog(parent) == 0)
 				{
 					// write decoded message to path
+					SteganographyConverter sc = new SteganographyConverter();
+					sc.decodeFile(imgPathFieldNew.getText(), saveFile.getSelectedFile().getAbsolutePath());
 				}
 			}
 		});

@@ -12,12 +12,19 @@ package cipher;
 /*
  *import list
  */
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.awt.Graphics2D;
+import java.awt.List;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.awt.image.DataBufferByte;
@@ -47,15 +54,12 @@ public class SteganographyConverter
 		return encode(path, original, ext1, original + "Encoded", message);
 	}
 	
-	public boolean encodeFile(String message, String filePath) throws IOException {
-		String[] parts = message.split("\\");
-		String path = "", original, ext1;
-		for (int i = 0; i < parts.length - 1; i++) {
-			path = path + parts[i] + "\\\\";
-		}
-		original = parts[parts.length - 1];
-		ext1 = original.substring(original.indexOf("."));
-		original = original.substring(0, original.indexOf("."));
+	public boolean encodeFile(String filePath, String image) throws IOException {
+		File file = new File(image);
+		String path, original, ext1;
+		path = file.getParent();
+		original = file.getName().substring(0, file.getName().lastIndexOf('.'));
+		ext1 = file.getName().substring(file.getName().lastIndexOf('.') + 1);
 		return encodeImage(path, original, ext1, original + "Encoded", Paths.get(filePath));
 	}
 	
@@ -65,6 +69,14 @@ public class SteganographyConverter
 		path = file.getParent();
 		name = file.getName().substring(0, file.getName().lastIndexOf('.'));
 		return decode(path, name);
+	}
+	
+	public void decodeFile (String image, String filePath) {
+		File file = new File(image);
+		String path, name;
+		path = file.getParent();
+		name = file.getName().substring(0, file.getName().lastIndexOf('.'));
+		decodeImage(path, name, filePath);
 	}
 	
 	/*
@@ -122,6 +134,26 @@ public class SteganographyConverter
 				"There is no hidden message in this image!","Error",
 				JOptionPane.ERROR_MESSAGE);
 			return "";
+		}
+	}
+	
+	public void decodeImage(String path, String name, String filePath)
+	{
+		byte[] decode;
+		try
+		{
+			//user space is necessary for decrypting
+			BufferedImage image  = user_space(getImage(image_path(path,name,"png")));
+			decode = decode_text(get_byte_data(image));
+			FileOutputStream fos = new FileOutputStream(filePath);
+			fos.write(decode);
+			fos.close();
+		}
+		catch(Exception e)
+		{
+			JOptionPane.showMessageDialog(null, 
+				"There is no hidden message in this image!","Error",
+				JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
