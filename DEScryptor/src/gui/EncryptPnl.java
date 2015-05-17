@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.security.GeneralSecurityException;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -91,7 +92,7 @@ public class EncryptPnl extends JPanel {
 		saveFile = new JFileChooser();
 		textFilter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
 		openFile.addChoosableFileFilter(textFilter);
-		openFile.setAcceptAllFileFilterUsed(false);
+		//openFile.setAcceptAllFileFilterUsed(false);
 		
 		openPtKBtn.addActionListener(new ActionListener() {
 			@Override
@@ -174,6 +175,11 @@ public class EncryptPnl extends JPanel {
 		exportBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				String originalMessage = "";
+				String finalEncryptedDesKey = "";
+				String finalEncryptedMessage = "";
+				
 				boolean encryptSucces = false;
 				//mindfucked door dees if -->
 				if (!myPrivateKeyField.getText().equals("Insert key") && !receiverPublicKeyField.getText().equals("Insert key")) {
@@ -187,9 +193,13 @@ public class EncryptPnl extends JPanel {
 						if (fileRadBtn.isSelected() && messagePathField.getText() != "Set a path...") {
 							inputStream = new FileInputStream(messagePathField.getText());
 							String everything = IOUtils.toString(inputStream);
+							originalMessage = everything; //finalsave
 							EncryptedText = DES.encrypt(everything);
+							finalEncryptedMessage = EncryptedText; //finalsave
 						} else if (messageArea.getText() != "Type your message") {
+							originalMessage = messageArea.getText(); //finalsave
 							EncryptedText = DES.encrypt(messageArea.getText());
+							finalEncryptedMessage = EncryptedText; //finalsave
 						} else {
 							throw new Exception("Not every area is filled");
 						}
@@ -203,6 +213,7 @@ public class EncryptPnl extends JPanel {
 								transformation, encoding);
 						System.out.println("Key encrypted.");
 						encryptSucces = true;
+						finalEncryptedDesKey = encryptedDESKey; //finalsave
 
 					} catch (Exception exception) {
 						exception.printStackTrace();
@@ -235,10 +246,21 @@ public class EncryptPnl extends JPanel {
 
 				// hashen
 				if (encryptSucces) {
-					String resultaatUitEncryptie = "test";
+					
 					HashGenerator hashGen = new HashGenerator();
-
-					String hash = hashGen.stringHash(resultaatUitEncryptie);
+					String hash = hashGen.stringHash(originalMessage);
+					String encryptedHash = "";
+					
+					RSACipher rsaCipher = new RSACipher();
+					try {
+						encryptedHash = rsaCipher.encrypt(
+								hash, privateKeyPathName,
+								transformation, encoding);
+					} catch (IOException | GeneralSecurityException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
 					if (saveFile.showSaveDialog(parent) == 0) {
 						File fileToSaveTo = saveFile.getSelectedFile();
 						String filename = fileToSaveTo.toString();
@@ -250,9 +272,29 @@ public class EncryptPnl extends JPanel {
 							}
 						}
 
-						try (FileWriter fw = new FileWriter(fileToSaveTo)) {
+						try (FileWriter fw = new FileWriter(fileToSaveTo + "_message")) {
 							// ...
-							fw.write(hash);
+							fw.write(finalEncryptedMessage);
+						} catch (IOException ex) {
+							ex.printStackTrace();
+							JOptionPane.showMessageDialog(parent, ex,
+									"An error occurred",
+									JOptionPane.ERROR_MESSAGE);
+						}
+						
+						try (FileWriter fw = new FileWriter(fileToSaveTo + "_DESkey")) {
+							// ...
+							fw.write(finalEncryptedDesKey);
+						} catch (IOException ex) {
+							ex.printStackTrace();
+							JOptionPane.showMessageDialog(parent, ex,
+									"An error occurred",
+									JOptionPane.ERROR_MESSAGE);
+						}
+						
+						try (FileWriter fw = new FileWriter(fileToSaveTo + "_hash")) {
+							// ...
+							fw.write(encryptedHash);
 						} catch (IOException ex) {
 							ex.printStackTrace();
 							JOptionPane.showMessageDialog(parent, ex,

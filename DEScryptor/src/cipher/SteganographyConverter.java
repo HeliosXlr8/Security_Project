@@ -3,6 +3,7 @@ package cipher;
 /*
  * Gebruikte tutorial: http://www.dreamincode.net/forums/topic/27950-steganography/
  * Meeste code en comments overgenomen, wel minimaal aangepast voor gebruik in ons programma
+ * Oorspronkelijk programma kon alleen tekst verstoppen, aanpassingen maken het verstoppen van een file nu mogelijk
  * 
  *@author  William_Wilson
  *@version 1.6
@@ -12,14 +13,19 @@ package cipher;
 /*
  *import list
  */
-
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.awt.Graphics2D;
+import java.awt.List;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.awt.image.DataBufferByte;
