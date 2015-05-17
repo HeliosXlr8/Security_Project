@@ -20,7 +20,7 @@ public class RSACipher {
     public String encrypt(String rawText, String publicKeyPath, String transformation, String encoding)
             throws IOException, GeneralSecurityException {
 
-        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(IOUtils.toByteArray(new FileInputStream(publicKeyPath + publicKeyName)));
+        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(IOUtils.toByteArray(new FileInputStream(publicKeyPath/* + publicKeyName*/)));
 
         Cipher cipher = Cipher.getInstance(transformation);
         cipher.init(Cipher.ENCRYPT_MODE, KeyFactory.getInstance("RSA").generatePublic(x509EncodedKeySpec));
@@ -31,7 +31,7 @@ public class RSACipher {
     public String decrypt(String cipherText, String privateKeyPath, String transformation, String encoding)
             throws IOException, GeneralSecurityException {
 
-        PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(IOUtils.toByteArray(new FileInputStream(privateKeyPath + privateKeyName)));
+        PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(IOUtils.toByteArray(new FileInputStream(privateKeyPath /* + privateKeyName*/)));
 
         Cipher cipher = Cipher.getInstance(transformation);
         cipher.init(Cipher.DECRYPT_MODE, KeyFactory.getInstance("RSA").generatePrivate(pkcs8EncodedKeySpec));

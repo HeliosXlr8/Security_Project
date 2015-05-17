@@ -1,19 +1,28 @@
 package DES;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
-public class DESencrypter
+public class DESencrypter implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private SecretKey key;
 	private Cipher ecipher;
 	private Cipher dcipher;
@@ -74,4 +83,57 @@ public class DESencrypter
 	{	
 		return new BASE64Encoder().encode(key.getEncoded());
 	}
+	
+	public void setKeyStr(String key){
+		// decode the base64 encoded string
+		byte[] decodedKey = Base64.getDecoder().decode(key);
+		// rebuild key using SecretKeySpec
+		SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES"); 
+		this.key = originalKey;
+	}
+	
+    public void setKey(SecretKey key) {
+		this.key = key;
+	}
+
+	public final void toFileSystem(SecretKey key)
+            throws IOException {
+        
+        FileOutputStream privateKeyOutputStream = null;
+        FileOutputStream publicKeyOutputStream = null;
+        
+        try {
+        	/*
+            File privateKeyFile = new File(privateKeyPathName);
+            File publicKeyFile = new File(publicKeyPathName);
+            
+            if(!privateKeyFile.exists()){
+            	privateKeyFile.mkdir();
+            }            
+            if(!publicKeyFile.exists()){
+            	publicKeyFile.mkdir();
+            }
+			*/
+        	
+            privateKeyOutputStream = new FileOutputStream("bin/DESKey.key" /*privateKeyFile + privateKeyName*/);
+            privateKeyOutputStream.write(key.getEncoded());
+            
+        } catch(IOException ioException) {
+            throw ioException;
+        } finally {
+        
+            try {
+                
+                if (privateKeyOutputStream != null) {
+                    privateKeyOutputStream.close();
+                }
+                if (publicKeyOutputStream != null) {
+                    publicKeyOutputStream.close();
+                }   
+                
+            } catch(IOException ioException) {
+                throw ioException;
+            }
+        }
+    }
 }

@@ -60,7 +60,7 @@ public final class RSAKeyPair {
         FileOutputStream publicKeyOutputStream = null;
         
         try {
-        	
+        	/*
             File privateKeyFile = new File(privateKeyPathName);
             File publicKeyFile = new File(publicKeyPathName);
             
@@ -70,11 +70,12 @@ public final class RSAKeyPair {
             if(!publicKeyFile.exists()){
             	publicKeyFile.mkdir();
             }
-
-            privateKeyOutputStream = new FileOutputStream(privateKeyFile + privateKeyName);
+			*/
+        	
+            privateKeyOutputStream = new FileOutputStream(privateKeyPathName /*privateKeyFile + privateKeyName*/);
             privateKeyOutputStream.write(privateKey.getEncoded());
 
-            publicKeyOutputStream = new FileOutputStream(publicKeyFile + publicKeyName);
+            publicKeyOutputStream = new FileOutputStream(publicKeyPathName /*publicKeyFile + publicKeyName*/);
             publicKeyOutputStream.write(publicKey.getEncoded());
             
         } catch(IOException ioException) {
