@@ -176,7 +176,7 @@ public class EncryptPnl extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				boolean encryptSucces = false;
 				//mindfucked door dees if -->
-				if (myPrivateKeyField.getText() != "Insert key" || receiverPublicKeyField.getText() != "Insert key") {
+				if (!myPrivateKeyField.getText().equals("Insert key") && !receiverPublicKeyField.getText().equals("Insert key")) {
 					// encrypten
 					DESencrypter DES = new DESencrypter();
 					DES.setKeyStr(parent.des.getKeyStr());
