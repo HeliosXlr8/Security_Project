@@ -4,9 +4,13 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.security.GeneralSecurityException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -18,6 +22,10 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.apache.commons.io.IOUtils;
+
+import DES.DESencrypter;
+import RSA.RSACipher;
 import main.ResLoader;
 import net.miginfocom.swing.MigLayout;
 
@@ -49,6 +57,11 @@ public class DecryptPnl extends JPanel
 	private JButton saveAsBtn;
 	
 	private String hash = null;
+	
+	private final String privateKeyPathName = "bin/private.key";
+	private final String publicKeyPathName = "bin/public.key";
+	private final String transformation = "RSA/ECB/PKCS1Padding";
+	private final String encoding = "UTF-8";
 	
 	private JFileChooser openFile;
 	private JFileChooser saveFile;
@@ -213,6 +226,15 @@ public class DecryptPnl extends JPanel
 			}
 		});
 		
+		saveAsBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				totalDecrypt(true);
+
+			}
+		});
+		
 		genuinityChkResults = new String[]
 		{
 			"message not original", 
@@ -224,6 +246,70 @@ public class DecryptPnl extends JPanel
 			"wrong hash or message altered after transmission", 
 			"message confirmed as intact"
 		};
+	}
+	
+	private String totalDecrypt(boolean toFile) {
+		String encryptedMessage = "";
+		String encryptedKey = "";
+		String DESKey = "";
+		String message = "";
+		
+		if (messagePathField.getText() != "" && messageKeyPathField.getText() != "") {
+			FileInputStream inputStream1 = null;
+			FileInputStream inputStream2 = null;
+			try {
+				inputStream1 = new FileInputStream(new File(messagePathField.getText()));
+				inputStream2 = new FileInputStream(new File(messageKeyPathField.getText()));
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
+			try {
+				encryptedMessage = IOUtils.toString(inputStream1);
+				encryptedKey = IOUtils.toString(inputStream2);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+			RSACipher rsaCipher = new RSACipher();
+			try {
+				DESKey = rsaCipher.decrypt(
+						encryptedMessage, privateKeyPathName,
+						transformation, encoding);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			} catch (GeneralSecurityException e1) {
+				e1.printStackTrace();
+			}
+			DESencrypter DES = new DESencrypter();
+			DES.setKeyStr(DESKey);
+			
+			try {
+				message = DES.encrypt(encryptedMessage);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		if (toFile == true) {
+			if (saveFile.showSaveDialog(parent) == 0) {
+				File fileToSaveTo = saveFile.getSelectedFile();
+				String filename = fileToSaveTo.toString();
+
+				try (FileWriter fw = new FileWriter(fileToSaveTo)) {
+					// ...
+					fw.write(message);
+				} catch (IOException ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(parent, ex,
+							"An error occurred",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			return "was send to file";
+		}
+		else {
+			return message;
+		}
+			
 	}
 	
 	private void initComponents()
