@@ -38,6 +38,7 @@ public class DecryptPnl extends JPanel
 	public JTextField myPrivateKeyField;
 	public JTextField senderPublicKeyField;
 	private JTextField messagePathField;
+	private JTextField messageKeyPathField;
 	
 	private JButton openPtKBtn;	// "open my private key" button
 	private JButton openPcKBtn;	// "open sender's public key" button
@@ -120,7 +121,7 @@ public class DecryptPnl extends JPanel
 		saveFile = new JFileChooser();
 		textFilter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
 		openFile.addChoosableFileFilter(textFilter);
-		openFile.setAcceptAllFileFilterUsed(false);
+		//openFile.setAcceptAllFileFilterUsed(false);
 		
 		openPtKBtn.addActionListener(new ActionListener() {
 			@Override
@@ -178,8 +179,12 @@ public class DecryptPnl extends JPanel
 		chooseMessagePathBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (saveFile.showSaveDialog(parent) == 0) {
-					messagePathField.setText(saveFile.getSelectedFile()
+				if (openFile.showOpenDialog(parent) == 0) {
+					messagePathField.setText(openFile.getSelectedFile()
+							.getAbsolutePath());
+				}
+				if (openFile.showOpenDialog(parent) == 0) {
+					messageKeyPathField.setText(openFile.getSelectedFile()
 							.getAbsolutePath());
 				}
 			}
@@ -260,6 +265,14 @@ public class DecryptPnl extends JPanel
 		messagePathField = new JTextField();
 		messagePathField.setFont(ResLoader.getDefaultFont());
 		messagePnl.add(messagePathField, "width 100:500");
+		
+		JLabel messageKeyPathLbl = new JLabel("key: ");
+		messageKeyPathLbl.setFont(ResLoader.getDefaultFont());
+		messagePnl.add(messageKeyPathLbl);
+		
+		messageKeyPathField = new JTextField();
+		messageKeyPathField.setFont(ResLoader.getDefaultFont());
+		messagePnl.add(messageKeyPathField, "width 100:500");
 		
 		chooseMessagePathBtn = new JButton("choose...");
 		chooseMessagePathBtn.setFont(ResLoader.getDefaultFont());
