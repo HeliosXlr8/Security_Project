@@ -142,8 +142,8 @@ public class EncryptPnl extends JPanel {
 		chooseMessagePathBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (openFile.showOpenDialog(parent) == 0) {
-					messagePathField.setText(openFile.getSelectedFile()
+				if (saveFile.showSaveDialog(parent) == 0) {
+					messagePathField.setText(saveFile.getSelectedFile()
 							.getAbsolutePath());
 				}
 			}
@@ -225,7 +225,6 @@ public class EncryptPnl extends JPanel {
 							try {
 								inputStream.close();
 							} catch (IOException e1) {
-								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
 						}

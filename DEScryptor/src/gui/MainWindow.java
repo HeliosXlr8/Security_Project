@@ -84,6 +84,21 @@ public class MainWindow extends JFrame
 		encryptPnl.receiverPublicKeyField.setText(key);
 	}
 	
+	public String getSendersPublicKey()
+	{
+		return decryptPnl.senderPublicKeyField.getText();
+	}
+	
+	public void setSendersPublicKey(String key)
+	{
+		decryptPnl.senderPublicKeyField.setText(key);
+	}
+	
+	public void setHashFile()
+	{
+		
+	}
+	
 	private void initTabs()
 	{
 		tLabels = new JLabel[]{new JLabel("my keys"),   new JLabel("encrypt"), 

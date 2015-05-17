@@ -3,14 +3,21 @@ package gui;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.ResLoader;
 import net.miginfocom.swing.MigLayout;
@@ -22,7 +29,7 @@ public class DecryptPnl extends JPanel
 	 */
 	private static final long serialVersionUID = -1665345338497275072L;
 	
-	private JFrame parent;
+	private MainWindow parent;
 	
 	private JPanel infoPnl;
 	private JPanel messagePnl;
@@ -30,7 +37,7 @@ public class DecryptPnl extends JPanel
 	private JPanel frameBtnPnl;
 	
 	public JTextField myPrivateKeyField;
-	private JTextField senderPublicKeyField;
+	public JTextField senderPublicKeyField;
 	private JTextField messagePathField;
 	
 	private JButton openPtKBtn;	// "open my private key" button
@@ -41,13 +48,20 @@ public class DecryptPnl extends JPanel
 	private JButton openAsTextBtn;
 	private JButton saveAsBtn;
 	
+	private String hash;
+	
+	private JFileChooser openFile;
+	private JFileChooser saveFile;
+	
+	private FileNameExtensionFilter textFilter;
+	
 	private JLabel genuinityChkResultLbl;
 	private String[] genuinityChkResults;
 	
 	private JLabel hashChkResultLbl;
 	private String[] hashChkResults;
 	
-	public DecryptPnl(JFrame parent)
+	public DecryptPnl(MainWindow parent)
 	{
 		this.parent = parent;
 		setLayout(new MigLayout());
@@ -103,6 +117,52 @@ public class DecryptPnl extends JPanel
 	
 	private void initFunctionality()
 	{
+		openFile = new JFileChooser();
+		saveFile = new JFileChooser();
+		textFilter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
+		openFile.addChoosableFileFilter(textFilter);
+		openFile.setAcceptAllFileFilterUsed(false);
+		
+		openPtKBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (openFile.showOpenDialog(parent) == 0) {
+					File fileToReadFrom = openFile.getSelectedFile();
+
+					try {
+						byte[] content = Files.readAllBytes(fileToReadFrom
+								.toPath());
+						parent.setMyPrivateKey(new String(content, Charset
+								.forName("UTF-8")));
+					} catch (IOException ex) {
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(parent, ex,
+								"An error occurred", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		
+		openPcKBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (openFile.showOpenDialog(parent) == 0) {
+					File fileToReadFrom = openFile.getSelectedFile();
+
+					try {
+						byte[] content = Files.readAllBytes(fileToReadFrom
+								.toPath());
+						parent.setSendersPublicKey(new String(content, Charset
+								.forName("UTF-8")));
+					} catch (IOException ex) {
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(parent, ex,
+								"An error occurred", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		
 		getFromKeypairBtn.addActionListener(new ActionListener()
 		{
 			@Override
@@ -113,6 +173,39 @@ public class DecryptPnl extends JPanel
 				{
 					myPrivateKeyField.setText(((MainWindow) parent).getMyPrivateKey());
 				}
+			}
+		});
+		
+		chooseMessagePathBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (saveFile.showSaveDialog(parent) == 0) {
+					messagePathField.setText(saveFile.getSelectedFile()
+							.getAbsolutePath());
+				}
+			}
+		});
+		
+		openHashFileBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (openFile.showOpenDialog(parent) == 0) {
+					File fileToReadFrom = openFile.getSelectedFile();
+
+					try {
+						byte[] content = Files.readAllBytes(fileToReadFrom
+								.toPath());
+						hash = (new String(content, Charset
+								.forName("UTF-8")));
+					} catch (IOException ex) {
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(parent, ex,
+								"An error occurred", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				
+				// now do a hash check
+				//...
 			}
 		});
 		
