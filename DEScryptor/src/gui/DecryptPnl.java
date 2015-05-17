@@ -11,7 +11,6 @@ import java.nio.file.Files;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -48,7 +47,7 @@ public class DecryptPnl extends JPanel
 	private JButton openAsTextBtn;
 	private JButton saveAsBtn;
 	
-	private String hash;
+	private String hash = null;
 	
 	private JFileChooser openFile;
 	private JFileChooser saveFile;
