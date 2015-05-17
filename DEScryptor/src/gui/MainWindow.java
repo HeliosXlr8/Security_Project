@@ -65,11 +65,23 @@ public class MainWindow extends JFrame
 	public void setMyPrivateKey(String key)
 	{
 		keysPnl.myPrivateKeyField.setText(key);
+		encryptPnl.myPrivateKeyField.setText(key);
+		decryptPnl.myPrivateKeyField.setText(key);
 	}
 	
 	public String getMyPrivateKey()
 	{
 		return keysPnl.myPrivateKeyField.getText();
+	}
+	
+	public String getReceiversPublicKey()
+	{
+		return encryptPnl.receiverPublicKeyField.getText();
+	}
+	
+	public void setReceiversPublicKey(String key)
+	{
+		encryptPnl.receiverPublicKeyField.setText(key);
 	}
 	
 	private void initTabs()

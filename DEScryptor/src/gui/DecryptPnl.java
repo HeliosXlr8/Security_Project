@@ -29,7 +29,7 @@ public class DecryptPnl extends JPanel
 	private JPanel verificationPnl;
 	private JPanel frameBtnPnl;
 	
-	private JTextField myPrivateKeyField;
+	public JTextField myPrivateKeyField;
 	private JTextField senderPublicKeyField;
 	private JTextField messagePathField;
 	

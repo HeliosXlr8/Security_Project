@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -55,8 +56,8 @@ public class EncryptPnl extends JPanel {
 	private JPanel messagePathChooserPnl;
 	private JPanel frameBtnPnl;
 
-	private JTextField myPrivateKeyField;
-	private JTextField receiverPublicKeyField;
+	public JTextField myPrivateKeyField;
+	public JTextField receiverPublicKeyField;
 	private JTextField messagePathField;
 
 	private JButton openPtKBtn; // "open my private key" button
@@ -99,7 +100,45 @@ public class EncryptPnl extends JPanel {
 		textFilter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
 		openFile.addChoosableFileFilter(textFilter);
 		openFile.setAcceptAllFileFilterUsed(false);
-
+		
+		openPtKBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (openFile.showOpenDialog(parent) == 0) {
+					File fileToReadFrom = openFile.getSelectedFile();
+					try {
+						byte[] content = Files.readAllBytes(fileToReadFrom
+								.toPath());
+						parent.setMyPrivateKey(new String(content, Charset
+								.forName("UTF-8")));
+					} catch (IOException ex) {
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(parent, ex,
+								"An error occurred", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		
+		openPcKBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (openFile.showOpenDialog(parent) == 0) {
+					File fileToReadFrom = openFile.getSelectedFile();
+					try {
+						byte[] content = Files.readAllBytes(fileToReadFrom
+								.toPath());
+						parent.setReceiversPublicKey(new String(content, Charset
+								.forName("UTF-8")));
+					} catch (IOException ex) {
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(parent, ex,
+								"An error occurred", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		
 		chooseMessagePathBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
