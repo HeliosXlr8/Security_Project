@@ -273,7 +273,7 @@ public class DecryptPnl extends JPanel
 			RSACipher rsaCipher = new RSACipher();
 			try {
 				DESKey = rsaCipher.decrypt(
-						encryptedMessage, privateKeyPathName,
+						encryptedKey, privateKeyPathName,
 						transformation, encoding);
 			} catch (IOException e1) {
 				e1.printStackTrace();
@@ -284,7 +284,7 @@ public class DecryptPnl extends JPanel
 			DES.setKeyStr(DESKey);
 			
 			try {
-				message = DES.encrypt(encryptedMessage);
+				message = DES.decrypt(encryptedMessage);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
