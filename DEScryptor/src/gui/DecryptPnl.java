@@ -279,6 +279,7 @@ public class DecryptPnl extends JPanel
 		String encryptedKey = "";
 		String DESKey = "";
 		String message = "";
+	    final String transformation = "RSA/ECB/PKCS1Padding";
 		
 		if (messagePathField.getText() != "" && messageKeyPathField.getText() != "") {
 			FileInputStream inputStream1 = null;
@@ -289,6 +290,8 @@ public class DecryptPnl extends JPanel
 			} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
 			}
+			byte[] byteArrayKey = null;
+			String strbyteArrayKey ="";
 			try {
 				encryptedMessage = IOUtils.toString(inputStream1);
 				encryptedKey = IOUtils.toString(inputStream2);
@@ -298,9 +301,8 @@ public class DecryptPnl extends JPanel
 			
 			RSACipher rsaCipher = new RSACipher();
 			try {
-				DESKey = rsaCipher.decrypt(
-						encryptedKey, privateKeyPathName,
-						transformation, encoding);
+				DESKey = rsaCipher.decrypt(encryptedKey, publicKeyPathName,transformation, encoding);
+				DESKey = rsaCipher.decrypt(encryptedKey, privateKeyPathName,transformation, encoding);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			} catch (GeneralSecurityException e1) {

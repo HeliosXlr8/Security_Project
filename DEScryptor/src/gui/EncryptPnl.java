@@ -181,7 +181,7 @@ public class EncryptPnl extends JPanel {
 				String finalEncryptedMessage = "";
 				
 				boolean encryptSucces = false;
-				//mindfucked door dees if -->
+				
 				if (!myPrivateKeyField.getText().equals("Insert key") && !receiverPublicKeyField.getText().equals("Insert key")) {
 					// encrypten
 					DESencrypter DES = new DESencrypter();
@@ -269,11 +269,11 @@ public class EncryptPnl extends JPanel {
 								.contains("*.txt")) {
 							// selected extension: text file
 							if (!filename.endsWith(".txt")) {
-								fileToSaveTo = new File(filename + ".txt");
+								fileToSaveTo = new File(filename);
 							}
 						}
 
-						try (FileWriter fw = new FileWriter(fileToSaveTo + "_message")) {
+						try (FileWriter fw = new FileWriter(fileToSaveTo + "_message.txt")) {
 							// ...
 							fw.write(finalEncryptedMessage);
 						} catch (IOException ex) {
@@ -283,7 +283,7 @@ public class EncryptPnl extends JPanel {
 									JOptionPane.ERROR_MESSAGE);
 						}
 						
-						try (FileWriter fw = new FileWriter(fileToSaveTo + "_DESkey")) {
+						try (FileWriter fw = new FileWriter(fileToSaveTo + "_DESkey.txt")) {
 							// ...
 							fw.write(finalEncryptedDesKey);
 						} catch (IOException ex) {
@@ -293,7 +293,7 @@ public class EncryptPnl extends JPanel {
 									JOptionPane.ERROR_MESSAGE);
 						}
 						
-						try (FileWriter fw = new FileWriter(fileToSaveTo + "_hash")) {
+						try (FileWriter fw = new FileWriter(fileToSaveTo + "_hash.txt")) {
 							// ...
 							fw.write(encryptedHash);
 						} catch (IOException ex) {
