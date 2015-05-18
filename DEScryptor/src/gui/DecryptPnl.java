@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -15,9 +16,12 @@ import java.security.GeneralSecurityException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -226,6 +230,28 @@ public class DecryptPnl extends JPanel
 			}
 		});
 		
+		openAsTextBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				String text = totalDecrypt(false);
+				
+				JTextArea messageArea = new JTextArea("");
+				messageArea.setFont(ResLoader.getMonoFont());
+				JScrollPane messageAreaPane = new JScrollPane(messageArea);
+				
+				messageArea.setText(text);
+				
+				JFrame textWindow = new JFrame("text");
+				textWindow.setSize(new Dimension(480,320));
+				textWindow.setLocationRelativeTo(parent);
+				textWindow.add(messageAreaPane);
+				
+				textWindow.setVisible(true);
+			}
+		});
+		
 		saveAsBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -304,7 +330,7 @@ public class DecryptPnl extends JPanel
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
-			return "was send to file";
+			return "was sent to file";
 		}
 		else {
 			return message;

@@ -52,6 +52,16 @@ public class MainWindow extends JFrame
 		setVisible(true);
 	}
 	
+	public String getSymmetricKey()
+	{
+		return keysPnl.symmetricKeyField.getText();
+	}
+	
+	public void setSymmetricKey(String key)
+	{
+		keysPnl.symmetricKeyField.setText(key);
+	}
+	
 	public void setMyPublicKey(String key)
 	{
 		keysPnl.myPublicKeyField.setText(key);

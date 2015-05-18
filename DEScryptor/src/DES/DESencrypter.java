@@ -14,9 +14,6 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
 public class DESencrypter implements Serializable
 {
 	/**
@@ -60,13 +57,13 @@ public class DESencrypter implements Serializable
 		byte[] enc = ecipher.doFinal(utf8);
 
 		// Encode bytes to base64 to get a string
-		return new BASE64Encoder().encode(enc);
+		return new String(Base64.getEncoder().encode(enc));
 	}
 
 	public String decrypt(String str) throws Exception
 	{
 		// Decode base64 to get bytes
-		byte[] dec = new BASE64Decoder().decodeBuffer(str);
+		byte[] dec = Base64.getDecoder().decode(str);
 
 		byte[] utf8 = dcipher.doFinal(dec);
 
@@ -81,14 +78,14 @@ public class DESencrypter implements Serializable
 	
 	public String getKeyStr()
 	{	
-		return new BASE64Encoder().encode(key.getEncoded());
+		return new String(Base64.getEncoder().encode(key.getEncoded()));
 	}
 	
 	public void setKeyStr(String key){
 		// decode the base64 encoded string
 		byte[] decodedKey = Base64.getDecoder().decode(key);
 		// rebuild key using SecretKeySpec
-		SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DES"); 
+		SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DES/CBC/PKCS5Padding");
 		this.key = originalKey;
 	}
 	

@@ -86,7 +86,6 @@ public class KeysPnl extends JPanel {
 					parent.rsaKp.toFileSystem("bin/private.key",
 							"bin/public.key");
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 					JOptionPane.showMessageDialog(parent, e1,
 							"An error occurred", JOptionPane.ERROR_MESSAGE);
