@@ -20,12 +20,23 @@ public class RSACipher {
     public String encrypt(String rawText, String publicKeyPath, String transformation, String encoding)
             throws IOException, GeneralSecurityException {
 
-        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(IOUtils.toByteArray(new FileInputStream(publicKeyPath/* + publicKeyName*/)));
+        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(IOUtils.toByteArray(new FileInputStream(publicKeyPath /* + publicKeyName*/)));
 
         Cipher cipher = Cipher.getInstance(transformation);
         cipher.init(Cipher.ENCRYPT_MODE, KeyFactory.getInstance("RSA").generatePublic(x509EncodedKeySpec));
 
         return Base64.encodeBase64String(cipher.doFinal(rawText.getBytes(encoding)));
+    }
+    
+    public String encryptWPrivate(String rawText, String publicKeyPath, String transformation, String encoding)
+            throws IOException, GeneralSecurityException {
+
+        PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(IOUtils.toByteArray(new FileInputStream(publicKeyPath /* + privateKeyName*/)));
+
+        Cipher cipher = Cipher.getInstance(transformation);
+        cipher.init(Cipher.ENCRYPT_MODE, KeyFactory.getInstance("RSA").generatePrivate(pkcs8EncodedKeySpec));
+
+        return new String(cipher.doFinal(Base64.decodeBase64(rawText)), encoding);
     }
 
     public String decrypt(String cipherText, String privateKeyPath, String transformation, String encoding)
@@ -37,5 +48,16 @@ public class RSACipher {
         cipher.init(Cipher.DECRYPT_MODE, KeyFactory.getInstance("RSA").generatePrivate(pkcs8EncodedKeySpec));
 
         return new String(cipher.doFinal(Base64.decodeBase64(cipherText)), encoding);
+    }
+    
+    public String decryptWPublic(String cipherText, String privateKeyPath, String transformation, String encoding)
+            throws IOException, GeneralSecurityException {
+
+        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(IOUtils.toByteArray(new FileInputStream(privateKeyPath /* + publicKeyName*/)));
+
+        Cipher cipher = Cipher.getInstance(transformation);
+        cipher.init(Cipher.DECRYPT_MODE, KeyFactory.getInstance("RSA").generatePublic(x509EncodedKeySpec));
+
+        return Base64.encodeBase64String(cipher.doFinal(cipherText.getBytes(encoding)));
     }
 }

@@ -253,12 +253,12 @@ public class EncryptPnl extends JPanel {
 					String encryptedHash = "";
 					
 					RSACipher rsaCipher = new RSACipher();
+					
 					try {
-						encryptedHash = rsaCipher.encrypt(
-								hash, privateKeyPathName,
-								transformation, encoding);
+						encryptedHash = rsaCipher.encryptWPrivate(hash, privateKeyPathName,transformation, encoding);
 					} catch (IOException | GeneralSecurityException e1) {
 						// TODO Auto-generated catch block
+						System.out.println("hash");
 						e1.printStackTrace();
 					}
 					

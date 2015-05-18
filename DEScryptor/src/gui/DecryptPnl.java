@@ -13,6 +13,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.security.GeneralSecurityException;
 
+import javax.crypto.SecretKey;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -256,7 +257,7 @@ public class DecryptPnl extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				totalDecrypt(true);
+				String text = totalDecrypt(true);
 
 			}
 		});
@@ -277,7 +278,8 @@ public class DecryptPnl extends JPanel
 	private String totalDecrypt(boolean toFile) {
 		String encryptedMessage = "";
 		String encryptedKey = "";
-		String DESKey = "";
+		SecretKey DESKey = null;
+		String DESKeyStr = "";
 		String message = "";
 		
 		if (messagePathField.getText() != "" && messageKeyPathField.getText() != "") {
@@ -294,25 +296,31 @@ public class DecryptPnl extends JPanel
 			try {
 				encryptedMessage = IOUtils.toString(inputStream1);
 				encryptedKey = IOUtils.toString(inputStream2);
+				System.out.println("first key:" + encryptedKey + " msg: " + encryptedMessage);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 			
 			RSACipher rsaCipher = new RSACipher();
 			try {
-				DESKey = rsaCipher.decrypt(encryptedKey, publicKeyPathName,transformation, encoding);
-				DESKey = rsaCipher.decrypt(encryptedKey, privateKeyPathName,transformation, encoding);
+				//DESKeyStr = rsaCipher.decrypt(encryptedKey, publicKeyPathName,transformation, encoding);
+				//System.out.println("first DES key: " + DESKeyStr);
+				DESKeyStr = rsaCipher.decrypt(encryptedKey, privateKeyPathName,transformation, encoding);
+				System.out.println("second DES key: " + DESKeyStr);
 			} catch (IOException e1) {
+				System.out.println("error bij AES");
 				e1.printStackTrace();
 			} catch (GeneralSecurityException e1) {
+				System.out.println("error bij AES");
 				e1.printStackTrace();
 			}
 			DESencrypter DES = new DESencrypter();
-			DES.setKeyStr(DESKey);
+			DES.setKeyStr(DESKeyStr);
 			
 			try {
 				message = DES.decrypt(encryptedMessage);
 			} catch (Exception e) {
+				System.out.println("error bij DES");
 				e.printStackTrace();
 			}
 		}
