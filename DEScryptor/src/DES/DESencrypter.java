@@ -85,7 +85,7 @@ public class DESencrypter implements Serializable
 		// decode the base64 encoded string
 		byte[] decodedKey = Base64.getDecoder().decode(key);
 		// rebuild key using SecretKeySpec
-		SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DES/CBC/PKCS5Padding");
+		SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DES/ECB/PKCS5Padding");
 		this.key = originalKey;
 	}
 	

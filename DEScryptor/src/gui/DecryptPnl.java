@@ -279,7 +279,6 @@ public class DecryptPnl extends JPanel
 		String encryptedKey = "";
 		String DESKey = "";
 		String message = "";
-	    final String transformation = "RSA/ECB/PKCS1Padding";
 		
 		if (messagePathField.getText() != "" && messageKeyPathField.getText() != "") {
 			FileInputStream inputStream1 = null;
