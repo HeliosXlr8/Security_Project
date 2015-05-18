@@ -1,6 +1,6 @@
 package RSA;
 
-import org.apache.commons.codec.binary.Base64;
+//import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 
 import java.io.FileInputStream;
@@ -10,7 +10,7 @@ import java.security.KeyFactory;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import javax.crypto.Cipher;
-//import java.util.Base64;
+import java.util.Base64;
 
 public class RSACipher {
 	
@@ -25,7 +25,7 @@ public class RSACipher {
         Cipher cipher = Cipher.getInstance(transformation);
         cipher.init(Cipher.ENCRYPT_MODE, KeyFactory.getInstance("RSA").generatePublic(x509EncodedKeySpec));
 
-        return Base64.encodeBase64String(cipher.doFinal(rawText.getBytes(encoding)));
+        return Base64.getEncoder().encodeToString((cipher.doFinal(rawText.getBytes(encoding))));
     }
     
     public String encryptWPrivate(String rawText, String publicKeyPath, String transformation, String encoding)
@@ -36,7 +36,7 @@ public class RSACipher {
         Cipher cipher = Cipher.getInstance(transformation);
         cipher.init(Cipher.ENCRYPT_MODE, KeyFactory.getInstance("RSA").generatePrivate(pkcs8EncodedKeySpec));
 
-        return new String(cipher.doFinal(Base64.decodeBase64(rawText)), encoding);
+        return new String(cipher.doFinal(Base64.getDecoder().decode(rawText)), encoding);
     }
 
     public String decrypt(String cipherText, String privateKeyPath, String transformation, String encoding)
@@ -47,7 +47,7 @@ public class RSACipher {
         Cipher cipher = Cipher.getInstance(transformation);
         cipher.init(Cipher.DECRYPT_MODE, KeyFactory.getInstance("RSA").generatePrivate(pkcs8EncodedKeySpec));
 
-        return new String(cipher.doFinal(Base64.decodeBase64(cipherText)), encoding);
+        return new String(cipher.doFinal(Base64.getDecoder().decode(cipherText)), encoding);
     }
     
     public String decryptWPublic(String cipherText, String privateKeyPath, String transformation, String encoding)
@@ -58,6 +58,6 @@ public class RSACipher {
         Cipher cipher = Cipher.getInstance(transformation);
         cipher.init(Cipher.DECRYPT_MODE, KeyFactory.getInstance("RSA").generatePublic(x509EncodedKeySpec));
 
-        return Base64.encodeBase64String(cipher.doFinal(cipherText.getBytes(encoding)));
+        return Base64.getEncoder().encodeToString(cipher.doFinal(cipherText.getBytes(encoding)));
     }
 }

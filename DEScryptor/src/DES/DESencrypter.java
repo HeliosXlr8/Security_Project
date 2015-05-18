@@ -51,7 +51,7 @@ public class DESencrypter implements Serializable
 	public String encrypt(String str) throws Exception
 	{
 		// Encode the string into bytes using utf-8
-		byte[] utf8 = str.getBytes("UTF-8");
+		byte[] utf8 = str.getBytes("UTF8");
 
 		// Encrypt
 		byte[] enc = ecipher.doFinal(utf8);
@@ -68,7 +68,7 @@ public class DESencrypter implements Serializable
 		byte[] utf8 = dcipher.doFinal(dec);
 
 		// Decode using utf-8
-		return new String(utf8, Charset.forName("UTF-8"));
+		return new String(utf8, Charset.forName("UTF8"));
 	}
 	
 	public SecretKey getKey()
@@ -85,7 +85,7 @@ public class DESencrypter implements Serializable
 		// decode the base64 encoded string
 		byte[] decodedKey = Base64.getDecoder().decode(key);
 		// rebuild key using SecretKeySpec
-		SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DES/ECB/PKCS5Padding");
+		SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DES");
 		this.key = originalKey;
 	}
 	
