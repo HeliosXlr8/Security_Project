@@ -187,7 +187,7 @@ public class EncryptPnl extends JPanel {
 					DESencrypter DES = new DESencrypter();
 					//DES.setKeyStr(parent.des.getKeyStr());
 					DES.setKeyStr(parent.getSymmetricKey());
-					System.out.println(parent.des.getKeyStr());
+					//System.out.println(parent.des.getKeyStr());
 					FileInputStream inputStream = null;
 					String EncryptedText = "";
 					try {
