@@ -245,7 +245,6 @@ public class EncryptPnl extends JPanel {
 					}
 				}
 
-				// hashen
 				if (encryptSucces) {
 					
 					HashGenerator hashGen = new HashGenerator();
@@ -254,12 +253,15 @@ public class EncryptPnl extends JPanel {
 					
 					RSACipher rsaCipher = new RSACipher();
 					
-					try {
-						encryptedHash = rsaCipher.encryptWPrivate(hash, privateKeyPathName,transformation, encoding);
-					} catch (IOException | GeneralSecurityException e1) {
-						// TODO Auto-generated catch block
-						System.out.println("hash");
-						e1.printStackTrace();
+					if (useHashingChkBox.isSelected())
+					{
+						try {
+							encryptedHash = rsaCipher.encryptWPrivate(hash, privateKeyPathName,transformation, encoding);
+						} catch (IOException | GeneralSecurityException e1) {
+							// TODO Auto-generated catch block
+							System.out.println("hash");
+							e1.printStackTrace();
+						}
 					}
 					
 					if (saveFile.showSaveDialog(parent) == 0) {
@@ -293,14 +295,17 @@ public class EncryptPnl extends JPanel {
 									JOptionPane.ERROR_MESSAGE);
 						}
 						
-						try (FileWriter fw = new FileWriter(fileToSaveTo + "_hash.txt")) {
-							// ...
-							fw.write(encryptedHash);
-						} catch (IOException ex) {
-							ex.printStackTrace();
-							JOptionPane.showMessageDialog(parent, ex,
-									"An error occurred",
-									JOptionPane.ERROR_MESSAGE);
+						if (useHashingChkBox.isSelected())
+						{
+							try (FileWriter fw = new FileWriter(fileToSaveTo + "_hash.txt")) {
+								// ...
+								fw.write(encryptedHash);
+							} catch (IOException ex) {
+								ex.printStackTrace();
+								JOptionPane.showMessageDialog(parent, ex,
+										"An error occurred",
+										JOptionPane.ERROR_MESSAGE);
+							}
 						}
 					}
 				}
@@ -361,6 +366,7 @@ public class EncryptPnl extends JPanel {
 
 		useHashingChkBox = new JCheckBox("use hashing");
 		useHashingChkBox.setFont(ResLoader.getDefaultFont());
+		useHashingChkBox.setSelected(true);
 		optionsPnl.add(useHashingChkBox);
 
 		messageArea = new JTextArea("Type your message");
