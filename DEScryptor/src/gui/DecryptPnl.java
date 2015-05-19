@@ -29,6 +29,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.io.IOUtils;
 
+import cipher.HashGenerator;
 import DES.DESencrypter;
 import RSA.RSACipher;
 import main.ResLoader;
@@ -62,6 +63,7 @@ public class DecryptPnl extends JPanel
 	private JButton saveAsBtn;
 	
 	private String hash = null;
+	private String originalMessage = "";
 	
 	private final String privateKeyPathName = "bin/private.key";
 	private final String publicKeyPathName = "bin/public.key";
@@ -226,8 +228,26 @@ public class DecryptPnl extends JPanel
 					}
 				}
 				
-				// now do a hash check
-				//...
+				RSACipher rsaCipher = new RSACipher();
+				String decryptedHash = "";
+				try {
+					decryptedHash = rsaCipher.decryptWPublic(hash, publicKeyPathName,transformation, encoding);
+					setGenuinityChkResult(1);
+				} catch (IOException | GeneralSecurityException e1) {
+					setGenuinityChkResult(0);
+					// TODO Auto-generated catch block
+					System.out.println("hash");
+					e1.printStackTrace();
+				}
+				HashGenerator hashGen = new HashGenerator();
+				String testHash = hashGen.stringHash(originalMessage);
+				
+				if (testHash == decryptedHash) {
+					setHashResult(1);
+				}
+				else {
+					setHashResult(0);
+				}
 			}
 		});
 		
@@ -237,6 +257,7 @@ public class DecryptPnl extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				String text = totalDecrypt(false);
+				originalMessage = text;
 				
 				JTextArea messageArea = new JTextArea("");
 				messageArea.setFont(ResLoader.getMonoFont());
@@ -258,6 +279,7 @@ public class DecryptPnl extends JPanel
 			public void actionPerformed(ActionEvent e) {
 				
 				String text = totalDecrypt(true);
+				originalMessage = text;
 
 			}
 		});
