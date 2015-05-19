@@ -87,10 +87,24 @@ public class DESencrypter implements Serializable
 		// rebuild key using SecretKeySpec
 		SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DES");
 		this.key = originalKey;
+		try {
+			ecipher.init(Cipher.ENCRYPT_MODE, this.key);
+			dcipher.init(Cipher.DECRYPT_MODE, this.key);
+		} catch (InvalidKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
     public void setKey(SecretKey key) {
 		this.key = key;
+		try {
+			ecipher.init(Cipher.ENCRYPT_MODE, this.key);
+			dcipher.init(Cipher.DECRYPT_MODE, this.key);
+		} catch (InvalidKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public final void toFileSystem(SecretKey key)
